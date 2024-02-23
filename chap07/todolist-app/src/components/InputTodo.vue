@@ -8,7 +8,7 @@ export default {
   methods: {
     addTodoHandler() {
       if (this.todo.length >= 3) {
-        this.$emit('add-todo', this.todo);
+        this.emitter.emit('add-todo', this.todo);
         this.todo = "";
       }
     }

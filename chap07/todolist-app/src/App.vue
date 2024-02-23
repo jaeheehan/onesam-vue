@@ -21,6 +21,11 @@ let ts = new Date().getTime()
 export default {
   name: "App",
   components: { InputTodo, TodoList },
+  created() {
+    this.emitter.on('add-todo', this.addTodo);
+    this.emitter.on('delete-todo', this.deleteTodo);
+    this.emitter.on('toggle-completed', this.toggleCompleted);
+  },
   data() {
     return {
       todoList: [
