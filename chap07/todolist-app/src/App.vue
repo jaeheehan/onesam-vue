@@ -1,47 +1,51 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div id="app" class="container">
+    <div class="card card-body bg-light">
+      <div class="title">:: Todolist App</div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="card card-default card-borderless">
+      <div class="card-body">
+        <InputTodo @add-todo="addTodo"/>
+        <TodoList :todoList="todoList" @delete-todo="deleteTodo"
+                  @toggle-completed="toggleCompleted"/>
+      </div>
+    </div>
+  </div>
 </template>
+<script>
+import InputTodo from "@/components/InputTodo.vue";
+import TodoList from "@/components/TodoList.vue";
 
-<style scoped>
-header {
-  line-height: 1.5;
+let ts = new Date().getTime()
+
+export default {
+  name: "App",
+  components: { InputTodo, TodoList },
+  data() {
+    return {
+      todoList: [
+        { id: ts, todo: "자전거 타기", completed: false},
+        { id: ts+1, todo: "딸과 공원 산책", completed: true},
+        { id: ts+2, todo: "일요일 애견 카페", completed: false},
+        { id: ts+3, todo: "Vue 원고 집필", completed: false},
+      ]
+    }
+  },
+  methods: {
+    addTodo(todo) {
+      if(todo.length >= 2){
+        this.todoList.push({ id: new Date().getTime(), todo: todo, completed: false})
+      }
+    },
+    deleteTodo(id){
+      let index = this.todoList.findIndex((item)=> id === item.id);
+      this.todoList.splice(index, 1);
+    },
+    toggleCompleted(id){
+      let index = this.todoList.findIndex((item)=> id ===item.id);
+      this.todoList[index].completed = !this.todoList[index].completed;
+    }
+  }
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+</script>
