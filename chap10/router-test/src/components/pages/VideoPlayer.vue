@@ -22,7 +22,7 @@
 
 <script>
 import { reactive, ref, inject } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { YoutubeVue3 } from "youtube-vue3";
 
 export default {
@@ -33,32 +33,39 @@ export default {
     const playerRef = ref(null);
     const currentRoute = useRoute();
     const router = useRouter();
+    let videoInfo,currentIndex, preVideoId, nextVideoId;
+    videoInfo = reactive({ video: videos.find((v)=>v.id === currentRoute.params.id)});
 
-    let videoInfo = reactive({ video: videos.find((v)=>v.id === currentRoute.params.id)});
+    const getNavId = (to) => {
+      videoInfo.video = videos.find((v)=>v.id === to.params.id)
+      currentIndex = videos.findIndex((v)=>v.id === videoInfo.video.id)
+      preVideoId = videos[currentIndex-1] ? videos[currentIndex-1].id : null;
+      nextVideoId = videos[currentIndex+1] ? videos[currentIndex+1].id : null;
+    }
+
+    getNavId(currentRoute)
+
     const stopVideo = () => {
       playerRef.value.player.stopVideo();
       router.push({ name: 'videos'});
     }
     const playNext = () => {
-      const index = videos.findIndex((v)=>v.id === videoInfo.video.id);
-      const nextVideo = videos[index+1];
-      if(nextVideo) {
-        videoInfo.video = nextVideo;
-        router.push({ name:'videos/id', params : { id : nextVideo.id}});
+      if(nextVideoId) {
+        router.push({ name:'videos/id', params : { id : nextVideoId }});
       } else {
-        videoInfo.video = videos[0];
         router.push({ name:'videos/id', params : { id : videos[0].id}});
       }
     }
 
     const playPrev = () => {
-      const index = videos.findIndex((v)=> v.id === videoInfo.video.id);
-      const preVideo = video[index-1];
-      if(preVideo) {
-        videoInfo.video = preVideo;
-        router.push({ name:'videos/id', params : { id : preVideo.id}});
+      if(preVideoId) {
+        router.push({ name:'videos/id', params : { id : preVideoId}});
       }
     }
+
+    onBeforeRouteUpdate((to) => {
+      getNavId(to)
+    })
 
     return { videoInfo, playerRef, playNext, stopVideo, playPrev };
   }
