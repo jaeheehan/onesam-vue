@@ -6,6 +6,7 @@ import Members from "@/components/pages/Members.vue";
 import Videos from "@/components/pages/Videos.vue";
 import MemberInfo from "@/components/pages/MemberInfo.vue";
 import VideoPlayer from "@/components/pages/VideoPlayer.vue";
+import NotFound from "@/components/pages/NotFound.vue";
 
 const membersIdGuard = (to, from) => {
     // members/:id 경로는 반드시 이전 경로가
@@ -28,6 +29,7 @@ const router = createRouter({
                 { path: ':id', name: 'videos/id', component: VideoPlayer}
             ]
         },
+        { path: '/:paths(.*)*', name: 'NotFound', component: NotFound },
     ]
 })
 
