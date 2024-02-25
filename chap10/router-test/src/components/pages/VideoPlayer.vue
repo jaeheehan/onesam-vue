@@ -37,17 +37,17 @@ export default {
     let videoInfo = reactive({ video: videos.find((v)=>v.id === currentRoute.params.id)});
     const stopVideo = () => {
       playerRef.value.player.stopVideo();
-      router.push('/videos');
+      router.push({ name: 'videos'});
     }
     const playNext = () => {
       const index = videos.findIndex((v)=>v.id === videoInfo.video.id);
       const nextVideo = videos[index+1];
       if(nextVideo) {
         videoInfo.video = nextVideo;
-        router.push('/videos/' + nextVideo.id);
+        router.push({ name:'videos/id', params : { id : nextVideo.id}});
       } else {
         videoInfo.video = videos[0];
-        router.push('/videos/' + videos[0].id);
+        router.push({ name:'videos/id', params : { id : videos[0].id}});
       }
     }
 
@@ -56,7 +56,7 @@ export default {
       const preVideo = video[index-1];
       if(preVideo) {
         videoInfo.video = preVideo;
-        router.push('/videos/' + preVideo.id);
+        router.push({ name:'videos/id', params : { id : preVideo.id}});
       }
     }
 
