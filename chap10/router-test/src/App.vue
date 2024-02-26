@@ -1,18 +1,26 @@
 <template>
   <div class="container">
     <Header/>
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <Suspense timeout="0">
+        <Component :is="Component"></Component>
+        <template #fallback>
+          <Loading/>
+        </template>
+      </Suspense>
+    </router-view>
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
 import { provide } from 'vue';
+import Loading from "@/components/Loading.vue";
 
 
 export default {
   name: "App",
-  components: { Header },
+  components: {Loading, Header },
   setup() {
     provide('videos', [
       { "id":"t0BHhqw_Ecc", "title":"범 내려온다", "category":"official" },
