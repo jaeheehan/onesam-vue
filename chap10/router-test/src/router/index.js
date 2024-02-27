@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, isNavigationFailure } from "vue-router";
 
-const Home = ()=> import('@/components/pages/Home.vue')
-const About = ()=> import('@/components/pages/About.vue')
-const Members = ()=> import('@/components/pages/Members.vue')
-const Videos = ()=> import('@/components/pages/Videos.vue')
-const MemberInfo = ()=> import('@/components/pages/MemberInfo.vue')
-const VideoPlayer = ()=> import('@/components/pages/VideoPlayer.vue')
-const NotFound = ()=> import('@/components/pages/NotFound.vue')
+const Home = ()=> import(/* webpackChunkName: "home" */ '@/components/pages/Home.vue')
+const About = ()=> import(/* webpackChunkName: "home" */ '@/components/pages/About.vue')
+const Members = ()=> import(/* webpackChunkName: "members" */ '@/components/pages/Members.vue')
+const Videos = ()=> import(/* webpackChunkName: "videos" */ '@/components/pages/Videos.vue')
+const MemberInfo = ()=> import(/* webpackChunkName: "members" */ '@/components/pages/MemberInfo.vue')
+const VideoPlayer = ()=> import(/* webpackChunkName: "videos" */ '@/components/pages/VideoPlayer.vue')
+const NotFound = ()=> import(/* webpackChunkName: "home" */ '@/components/pages/NotFound.vue')
 
 
 const membersIdGuard = (to, from) => {
