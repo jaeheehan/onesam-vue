@@ -7,11 +7,10 @@
 <script setup>
 import axios from 'axios'
 
-const requestAPI = ()=> {
+const requestAPI = async ()=> {
   const url = "/api/todolist/gdhong"
-  axios.get(url).then((response)=> {
-    console.log("# 응답객체 :", response)
-  })
+  const response = await axios.get(url);
+  console.log("# 응답객체 :", response)
 }
 
 requestAPI();
