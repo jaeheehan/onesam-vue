@@ -2,6 +2,7 @@
   <div class="container">
     <Header/>
     <router-view/>
+    <Loading v-if="states.isLoading" />
   </div>
 </template>
 
@@ -9,14 +10,16 @@
 import { reactive, computed, provide } from "vue";
 import Header from '@/components/Header.vue'
 import axios from 'axios'
+import Loading from "@/components/Loading.vue";
 
 const owner = "gdhong";
 // 의도적으로 지연 시간을 발생시키는 /todolist_long 이용
 const BASEURI = "/api/todolist_long";
 
-const states = reactive({ todoList : []} )
+const states = reactive({ todoList : [], isLoading: false} )
 
 const fetchTodoList = async () => {
+  states.isLoading = true
   try {
     const response = await axios.get(BASEURI + `/${owner}`);
     if(response.status === 200){
@@ -27,9 +30,11 @@ const fetchTodoList = async () => {
   }catch(error){
     alert('에러 발생 : ' + error);
   }
+  states.isLoading = false
 }
 
 const addTodo = async ({todo, desc}, successCallback) => {
+  states.isLoading = true
   try {
     const payload = {todo, desc };
     const response = await axios.post(BASEURI + `/${owner}`, payload)
@@ -42,9 +47,11 @@ const addTodo = async ({todo, desc}, successCallback) => {
   }catch(error){
     alert('에러발생 :' + error)
   }
+  states.isLoading = false
 }
 
 const updateTodo = async ({ id,todo, desc, done}, successCallback) => {
+  states.isLoading = true
   try{
     const payload = { todo, desc, done };
     const response = await axios.put(BASEURI + `/${owner}/${id}`, payload)
@@ -58,10 +65,12 @@ const updateTodo = async ({ id,todo, desc, done}, successCallback) => {
   }catch(error){
     alert('에러발생 :' + error);
   }
+  states.isLoading = false
 }
 
 
 const deleteTodo = async(id)=> {
+  states.isLoading = true
   try{
     const response = await axios.delete(BASEURI + `/${owner}/${id}`)
     if(response.data.status === "success"){
@@ -73,9 +82,11 @@ const deleteTodo = async(id)=> {
   }catch(error){
     alert('에러발생 :' + error);
   }
+  states.isLoading = false
 }
 
 const toggleDone = async(id)=> {
+  states.isLoading = true
   try{
     const response = await axios.put(BASEURI + `/${owner}/${id}/done`)
     if(response.data.status === "success"){
@@ -87,6 +98,7 @@ const toggleDone = async(id)=> {
   }catch(error){
     alert('에러발생 :' + error);
   }
+  states.isLoading = false
 }
 
 
